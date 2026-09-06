@@ -1,0 +1,1 @@
+.beatMark{position:absolute;top:0;bottom:0;width:1px;background:#7778;z-index:4;pointer-events:none}.beatMark:nth-of-type(4n+1){width:2px;background:#fff;opacity:.8}#beatGrid.active{outline:2px solid #fff}
