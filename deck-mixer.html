@@ -8,41 +8,377 @@
 <div class="stage" id="stage"><video id="videoStage" playsinline controls hidden></video><canvas id="viz"></canvas><div class="label" id="stageLabel">Visualizer</div></div>
 <div class="panel"><input id="masterSeek" class="range" type="range" min="0" max="1" step=".001" value="0"><div class="row"><button class="btn" id="playBoth">▶▶ Play A + B</button><button class="btn" id="stopBoth">■ Stop</button><button class="btn" id="prevA">⏮ A Prev</button><button class="btn" id="nextA">A Next ⏭</button><button class="btn" id="prevB">⏮ B Prev</button><button class="btn" id="nextB">B Next ⏭</button></div></div>
 <div class="grid">
-<section class="deck"><h3>DECK A</h3><div class="assign"><label class="btn center">🎵 Assign Track<input id="trackA" type="file" accept="audio/*"></label><label class="btn center">🎬 Assign Video<input id="videoA" type="file" accept="video/*"></label></div><div class="assigned" id="infoA">Nothing assigned</div><select id="selA"></select><div class="controls"><div class="control">Gain<input id="gainA" class="range" type="range" min="0" max="1.5" step=".01" value="1"></div><div class="control">Low<input id="lowA" class="range" type="range" min="-1" max="1" step=".01" value="0"></div><div class="control">Mid<input id="midA" class="range" type="range" min="-1" max="1" step=".01" value="0"></div><div class="control">High<input id="highA" class="range" type="range" min="-1" max="1" step=".01" value="0"></div></div><div class="row"><button class="btn" id="playA">▶</button><button class="btn" id="stopA">■</button><button class="btn" id="muteA">🔇</button><button class="btn" id="showA">👁 Show Video</button></div><audio id="audioA" controls style="width:100%"></audio><label>Volume <input id="volA" class="range" type="range" min="0" max="1" step=".01" value="1"></label></section>
-<section class="deck"><h3>DECK B</h3><div class="assign"><label class="btn center">🎵 Assign Track<input id="trackB" type="file" accept="audio/*"></label><label class="btn center">🎬 Assign Video<input id="videoB" type="file" accept="video/*"></label></div><div class="assigned" id="infoB">Nothing assigned</div><select id="selB"></select><div class="controls"><div class="control">Gain<input id="gainB" class="range" type="range" min="0" max="1.5" step=".01" value="1"></div><div class="control">Low<input id="lowB" class="range" type="range" min="-1" max="1" step=".01" value="0"></div><div class="control">Mid<input id="midB" class="range" type="range" min="-1" max="1" step=".01" value="0"></div><div class="control">High<input id="highB" class="range" type="range" min="-1" max="1" step=".01" value="0"></div></div><div class="row"><button class="btn" id="playB">▶</button><button class="btn" id="stopB">■</button><button class="btn" id="muteB">🔇</button><button class="btn" id="showB">👁 Show Video</button></div><audio id="audioB" controls style="width:100%"></audio><label>Volume <input id="volB" class="range" type="range" min="0" max="1" step=".01" value="1"></label></section>
+<section class="deck"><h3>DECK A</h3><div class="assign"><label class="btn center">🎵 Assign Track<input id="trackA" type="file" accept="audio/*"></label><label class="btn center">🎬 Assign Video<input id="videoA" type="file" accept="video/*"></label></div><div class="assigned" id="infoA">Nothing assigned</div><select id="selA"></select><div class="controls"><div class="control">Gain<input id="gainA" class="range" type="range" min="0" max="1.5" step=".01" value="1"></div><div class="control">Low<input id="lowA" class="range" type="range" min="-1" max="1" step=".01" value="0"></div><div class="control">Mid<input id="midA" class="range" type="range" min="-1" max="1" step=".01" value="0"></div><div class="control">High<input id="highA" class="range" type="range" min="-1" max="1" step=".01" value="0"></div></div><div class="row"><button class="btn" id="playA">▶</button><button class="btn" id="stopA">■</button><button class="btn" id="muteA">🔇</button><button class="btn" id="showA">👁 Show Video</button></div><audio id="audioA" controls style="width:100%" crossorigin="anonymous"></audio><label>Volume <input id="volA" class="range" type="range" min="0" max="1" step=".01" value="1"></label></section>
+<section class="deck"><h3>DECK B</h3><div class="assign"><label class="btn center">🎵 Assign Track<input id="trackB" type="file" accept="audio/*"></label><label class="btn center">🎬 Assign Video<input id="videoB" type="file" accept="video/*"></label></div><div class="assigned" id="infoB">Nothing assigned</div><select id="selB"></select><div class="controls"><div class="control">Gain<input id="gainB" class="range" type="range" min="0" max="1.5" step=".01" value="1"></div><div class="control">Low<input id="lowB" class="range" type="range" min="-1" max="1" step=".01" value="0"></div><div class="control">Mid<input id="midB" class="range" type="range" min="-1" max="1" step=".01" value="0"></div><div class="control">High<input id="highB" class="range" type="range" min="-1" max="1" step=".01" value="0"></div></div><div class="row"><button class="btn" id="playB">▶</button><button class="btn" id="stopB">■</button><button class="btn" id="muteB">🔇</button><button class="btn" id="showB">👁 Show Video</button></div><audio id="audioB" controls style="width:100%" crossorigin="anonymous"></audio><label>Volume <input id="volB" class="range" type="range" min="0" max="1" step=".01" value="1"></label></section>
 </div>
 <div class="panel"><h3>MASTER</h3><label>Crossfader A ← → B<input id="xf" class="range" type="range" min="0" max="1" step=".01" value=".5"></label><label>Master<input id="master" class="range" type="range" min="0" max="1" step=".01" value=".85"></label><div class="two"><label>Original<input id="original" class="range" type="range" min="0" max="1" step=".01" value="1"></label><label>Overlay track<input id="overlay" class="range" type="range" min="0" max="1" step=".01" value="1"></label></div><div class="row"><button class="btn" id="repeat">🔁 Repeat: Off</button><button class="btn" id="shuffle">🔀 Shuffle: Off</button><button class="btn" id="autoViz">✨ Auto Visuals: Off</button></div><div id="status" class="small">Ready.</div></div>
 <div class="panel"><h3>🎨 Visualizations</h3><div class="tabs" id="vizTabs"></div><div class="two"><label>Hue <input id="hue" class="range" type="range" min="0" max="360" value="300"></label><label>Beat Reactivity <input id="react" class="range" type="range" min="0" max="2" step=".01" value="1"></label></div></div>
 <div class="panel"><div class="tabs"><button class="tab on" data-mode="media">Media</button><button class="tab" data-mode="playA">Playlist A</button><button class="tab" data-mode="playB">Playlist B</button><button class="tab" data-mode="files">Files</button></div><div style="margin-top:10px"><label class="file">⬆️ Upload to Library<input id="upload" type="file" accept="audio/*,video/*" multiple></label><button class="btn" id="saveLib">💾 Save Library</button><button class="btn" id="clearLib">🗑 Clear Library</button></div><div id="mediaView" class="library" style="margin-top:10px"></div></div>
 </main>
 <script>
-(()=>{const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], status=$('#status');const dbName='cadence-media-v2';let db,items=[],A={track:null,video:null,index:-1,playlist:[]},B={track:null,video:null,index:-1,playlist:[]};let repeat=false,shuffle=false,autoViz=false,vizName='Aurora',vizNames=['Aurora','Bars','Radial','Wave','Particles','Starfield','Tunnel','Kaleidoscope','Plasma','Rings','Matrix','Orbit','Nebula','Spiral','Lightning','Pulse','Lattice','Film'];let audioCtx,analyser,data,raf,phase=0;
-function say(x){status.textContent=x}function uid(){return crypto.randomUUID?.()||Date.now()+Math.random()}function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+(()=>{
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)], status=$('#status');
+const dbName='cadence-media-v2';
+let db,items=[],A={track:null,video:null,index:-1,playlist:[]},B={track:null,video:null,index:-1,playlist:[]};
+let repeat=false,shuffle=false,autoViz=false,vizName='Aurora';
+const vizNames=['Aurora','Bars','Radial','Wave','Particles','Starfield','Tunnel','Kaleidoscope','Plasma','Rings','Matrix','Orbit','Nebula','Spiral','Lightning','Pulse','Lattice','Film'];
+let audioCtx=null, analyser=null, data=null, raf=null, phase=0;
+let deckNodes={A:null,B:null}, masterGain=null, connected={A:false,B:false};
+
+function say(x){status.textContent=x}
+function uid(){return crypto.randomUUID?.()||Date.now()+Math.random()}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[c]))}
+
 function initDB(){return new Promise((res,rej)=>{const r=indexedDB.open(dbName,1);r.onupgradeneeded=()=>r.result.createObjectStore('media',{keyPath:'id'});r.onsuccess=()=>{db=r.result;res()};r.onerror=()=>rej(r.error)})}
 async function dbPut(x){return new Promise((res,rej)=>{const r=db.transaction('media','readwrite').objectStore('media').put(x);r.onsuccess=res;r.onerror=()=>rej(r.error)})}
 async function dbGet(id){return new Promise((res,rej)=>{const r=db.transaction('media').objectStore('media').get(id);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
 async function dbAll(){return new Promise((res,rej)=>{const r=db.transaction('media').objectStore('media').getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+async function dbDel(id){return new Promise((res,rej)=>{const r=db.transaction('media','readwrite').objectStore('media').delete(id);r.onsuccess=res;r.onerror=()=>rej(r.error)})}
+
 function saveState(){localStorage.setItem('cadence-playlists',JSON.stringify({A:A.playlist,B:B.playlist,repeat,shuffle,vizName}))}
 function loadState(){try{const s=JSON.parse(localStorage.getItem('cadence-playlists')||'{}');A.playlist=s.A||[];B.playlist=s.B||[];repeat=!!s.repeat;shuffle=!!s.shuffle;vizName=s.vizName||'Aurora'}catch{}}
-function renderLib(){const view=$('#mediaView');view.innerHTML=items.length?items.map(x=>`<div class="item"><b>${esc(x.name)}</b> <span class="pill">${x.kind}</span><div class="actions"><button class="btn" data-a="${x.id}">A: Track</button><button class="btn" data-av="${x.id}">A: Video</button><button class="btn" data-b="${x.id}">B: Track</button><button class="btn" data-bv="${x.id}">B: Video</button><button class="btn" data-pa="${x.id}">＋ Playlist A</button><button class="btn" data-pb="${x.id}">＋ Playlist B</button><button class="btn danger" data-del="${x.id}">Delete</button></div></div>`).join(''):'<div class="small">Library is empty. Upload audio or video.</div>';
-view.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>assignFromLib('A','track',b.dataset.a));view.querySelectorAll('[data-av]').forEach(b=>b.onclick=()=>assignFromLib('A','video',b.dataset.av));view.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>assignFromLib('B','track',b.dataset.b));view.querySelectorAll('[data-bv]').forEach(b=>b.onclick=()=>assignFromLib('B','video',b.dataset.bv));view.querySelectorAll('[data-pa]').forEach(b=>b.onclick=()=>addPlaylist('A',b.dataset.pa));view.querySelectorAll('[data-pb]').forEach(b=>b.onclick=()=>addPlaylist('B',b.dataset.pb));view.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delItem(b.dataset.del))}
-async function addFile(f){const x={id:uid(),name:f.name,kind:f.type.startsWith('video')?'video':'audio',blob:f};items.push(x);await dbPut(x)}
-async function assignFromLib(k,type,id){const x=items.find(i=>i.id===id);if(!x)return;const d=k==='A'?A:B;d[type]=x;const el=$('#audio'+k);if(type==='track'){el.src=URL.createObjectURL(x.blob);el.load()}setInfo(k);say(x.name+' assigned to Deck '+k+' as '+type+'.')}
-function setInfo(k){const d=k==='A'?A:B;$('#info'+k).innerHTML=`<b>Track:</b> ${esc(d.track?.name||'—')}<br><b>Video:</b> ${esc(d.video?.name||'—')}`;renderSelect(k)}
-function renderSelect(k){const d=k==='A'?A:B;const s=$('#sel'+k);s.innerHTML='<option value="">Playlist / choose media…</option>'+d.playlist.map((id,i)=>{const x=items.find(q=>q.id===id);return x?`<option value="${id}" ${i===d.index?'selected':''}>${i+1}. ${esc(x.name)}</option>`:''}).join('')}
-async function playTrack(k){const d=k==='A'?A:B,e=$('#audio'+k);if(!d.track){say('Assign a track to Deck '+k+' first.');return}try{if(!audioCtx){audioCtx=new AudioContext();analyser=audioCtx.createAnalyser();analyser.fftSize=256;data=new Uint8Array(analyser.frequencyBinCount)}await audioCtx.resume();await e.play();say('Deck '+k+' playing.')}catch{say('Tap Play '+k+' again for Safari playback permission.')}}
-function stop(k){const e=$('#audio'+k);e.pause();e.currentTime=0}
-function show(k){const d=k==='A'?A:B;if(!d.video){say('Assign a video to Deck '+k+' first.');return}$('#videoStage').src=URL.createObjectURL(d.video.blob);$('#videoStage').hidden=false;$('#stageLabel').textContent='Deck '+k+' Video';$('#videoStage').play().catch(()=>{})}
-function next(k,dir=1){const d=k==='A'?A:B;if(!d.playlist.length)return;let n=d.index+dir;if(shuffle)n=Math.floor(Math.random()*d.playlist.length);if(n>=d.playlist.length){if(repeat)n=0;else return}if(n<0)n=d.playlist.length-1;d.index=n;const x=items.find(q=>q.id===d.playlist[n]);if(x){if(x.kind==='video')d.video=x;else d.track=x; if(x.kind==='audio'){d.track=x;$('#audio'+k).src=URL.createObjectURL(x.blob);$('#audio'+k).load()}else show(k);setInfo(k)}}
-function addPlaylist(k,id){const d=k==='A'?A:B;if(!d.playlist.includes(id))d.playlist.push(id);d.index=d.index<0?0:d.index;saveState();renderSelect(k);renderPlaylists(k);say('Added to Playlist '+k)}
-function renderPlaylists(k){const d=k==='A'?A:B;$('#mediaView').innerHTML='<div class="playlist">'+(d.playlist.length?d.playlist.map((id,i)=>{const x=items.find(q=>q.id===id);return x?`<div class="plrow"><span>${i+1}. ${esc(x.name)}</span><button class="btn" data-load="${id}">Load</button><button class="btn" data-rm="${id}">✕</button></div>`:''}).join(''):'<div class="small">Playlist '+k+' is empty. Use ＋ Playlist '+k+' from Media.</div>')+'</div><div class="row" style="margin-top:8px"><button class="btn" id="backMedia">← Media</button><button class="btn" id="clearPl">Clear Playlist '+k+'</button></div>';$('#mediaView').querySelectorAll('[data-load]').forEach(b=>b.onclick=()=>{const x=items.find(q=>q.id===b.dataset.load);if(x){const d=k==='A'?A:B;x.kind==='video'?d.video=x:d.track=x;d.index=d.playlist.indexOf(x.id);if(x.kind==='audio'){$('#audio'+k).src=URL.createObjectURL(x.blob);$('#audio'+k).load()}setInfo(k)}});$('#mediaView').querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{d.playlist=d.playlist.filter(id=>id!==b.dataset.rm);saveState();renderPlaylists(k)});$('#backMedia').onclick=renderLib;$('#clearPl').onclick=()=>{d.playlist=[];d.index=-1;saveState();renderPlaylists(k)}}
-function setupAudio(){if(!audioCtx){audioCtx=new AudioContext();analyser=audioCtx.createAnalyser();analyser.fftSize=256;data=new Uint8Array(analyser.frequencyBinCount)}}
-function draw(){const c=$('#viz'),ctx=c.getContext('2d');c.width=c.clientWidth*devicePixelRatio;c.height=c.clientHeight*devicePixelRatio;ctx.scale(devicePixelRatio,devicePixelRatio);const w=c.clientWidth,h=c.clientHeight;ctx.clearRect(0,0,w,h);let level=.15;if(analyser){analyser.getByteFrequencyData(data);level=data.reduce((a,b)=>a+b,0)/data.length/255}const react=+$('#react').value, hue=+$('#hue').value, amp=10+level*80*react;ctx.lineWidth=2;ctx.strokeStyle='hsl('+hue+' 100% 65%)';ctx.fillStyle='hsla('+hue+' 100% 65% / .35)';phase+=.015;let n=48;for(let i=0;i<n;i++){let v=data?data[i%data.length]/255:.15,bar=v*h*.65+8;let x=i*w/n;if(vizName==='Bars'||vizName==='Aurora'||vizName==='Lattice'){ctx.fillRect(x,h-bar,w/n-2,bar)}else if(vizName==='Radial'||vizName==='Rings'||vizName==='Kaleidoscope'){let a=i/n*Math.PI*2,r=45+v*amp*3;ctx.beginPath();ctx.arc(w/2+Math.cos(a)*r,h/2+Math.sin(a)*r,3+v*amp/4,0,7);ctx.fill()}else if(vizName==='Wave'||vizName==='Pulse'){ctx.beginPath();ctx.moveTo(0,h/2);for(let x2=0;x2<w;x2+=8){let y=h/2+Math.sin(x2*.025+phase*3)*amp*(.2+v);ctx.lineTo(x2,y)}ctx.stroke()}else if(vizName==='Starfield'||vizName==='Particles'||vizName==='Nebula'||vizName==='Matrix'){let x=(i*97+phase*80)%w,y=(i*53+phase*40)%h,s=2+v*amp/8;ctx.beginPath();ctx.arc(x,y,s,0,7);ctx.fill()}else{ctx.beginPath();ctx.arc(w/2,h/2,50+i*3+v*amp,0,7);ctx.stroke()}}raf=requestAnimationFrame(draw)}
-$$('.tabs .tab').forEach(t=>t.onclick=()=>{const m=t.dataset.mode;$$('.tabs .tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');if(m==='playA')renderPlaylists('A');else if(m==='playB')renderPlaylists('B');else renderLib()});
-vizNames.forEach(n=>{const b=document.createElement('button');b.className='tab';b.textContent=n;b.onclick=()=>{vizName=n;$$('#vizTabs .tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');say('Visualizer: '+n);saveState()};$('#vizTabs').appendChild(b)});$$('#vizTabs .tab')[0].classList.add('on');
-$('#upload').onchange=async e=>{for(const f of e.target.files)await addFile(f);e.target.value='';renderLib();say('Media saved to local Library.')};$('#saveLib').onclick=()=>{saveState();say('Playlists and settings saved locally.')};$('#clearLib').onclick=async()=>{if(!confirm('Delete all local media?'))return;items=[];const tx=db.transaction('media','readwrite');tx.objectStore('media').clear();A={track:null,video:null,index:-1,playlist:[]};B={track:null,video:null,index:-1,playlist:[]};saveState();renderLib();setInfo('A');setInfo('B')};
-for(const k of ['A','B']){['track','video'].forEach(type=>$('#'+type+k).onchange=async e=>{const f=e.target.files[0];if(!f)return;await addFile(f);const x=items.at(-1);(k==='A'?A:B)[type]=x;if(type==='track'){$('#audio'+k).src=URL.createObjectURL(x.blob);$('#audio'+k).load()}setInfo(k);renderLib();e.target.value='';say(f.name+' assigned to Deck '+k+'.')});$('#sel'+k).onchange=e=>{const x=items.find(q=>q.id===e.target.value);if(x){const d=k==='A'?A:B;d.index=d.playlist.indexOf(x.id);x.kind==='video'?d.video=x:d.track=x;if(x.kind==='audio'){$('#audio'+k).src=URL.createObjectURL(x.blob);$('#audio'+k).load()}else show(k);setInfo(k)}};$('#play'+k).onclick=()=>playTrack(k);$('#stop'+k).onclick=()=>stop(k);$('#show'+k).onclick=()=>show(k);$('#vol'+k).oninput=e=>$('#audio'+k).volume=+e.target.value;$('#mute'+k).onclick=()=>{const e=$('#audio'+k);e.muted=!e.muted;$('#mute'+k).textContent=e.muted?'🔊':'🔇'};$('#next'+k).onclick=()=>next(k,1);$('#prev'+k).onclick=()=>next(k,-1)}
-$('#playBoth').onclick=async()=>{if(!A.track||!B.track)return say('Assign a track to both decks first.');await Promise.all([playTrack('A'),playTrack('B')]);say('✓ A + B playing simultaneously.')};$('#stopBoth').onclick=()=>{stop('A');stop('B');$('#videoStage').pause()};$('#repeat').onclick=()=>{repeat=!repeat;$('#repeat').textContent='🔁 Repeat: '+(repeat?'On':'Off');saveState()};$('#shuffle').onclick=()=>{shuffle=!shuffle;$('#shuffle').textContent='🔀 Shuffle: '+(shuffle?'On':'Off');saveState()};$('#autoViz').onclick=()=>{autoViz=!autoViz;$('#autoViz').textContent='✨ Auto Visuals: '+(autoViz?'On':'Off')};$('#nextA').onclick=()=>next('A');$('#nextB').onclick=()=>next('B');$('#prevA').onclick=()=>next('A',-1);$('#prevB').onclick=()=>next('B',-1);$('#xf').oninput=e=>{let v=+e.target.value;$('#audioA').volume=(1-v)*+$('#master').value;$('#audioB').volume=v*+$('#master').value};$('#master').oninput=e=>{$('#audioA').volume=(1-+$('#xf').value)*+e.target.value;$('#audioB').volume=+$('#xf').value*+e.target.value};$('#full').onclick=()=>$('#stage').requestFullscreen?.();
-$('#audioA').ontimeupdate=()=>$('#masterSeek').value=$('#audioA').duration?$('#audioA').currentTime/$('#audioA').duration:0;$('#audioA').onended=()=>next('A');$('#audioB').onended=()=>next('B');$('#masterSeek').oninput=e=>{if($('#audioA').duration)$('#audioA').currentTime=+e.target.value*$('#audioA').duration;if($('#audioB').duration)$('#audioB').currentTime=+e.target.value*$('#audioB').duration};
-(async()=>{await initDB();items=await dbAll();loadState();setInfo('A');setInfo('B');renderLib();draw()})()})();
+
+function ensureAudio(){
+  if(audioCtx) return;
+  audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  analyser=audioCtx.createAnalyser();
+  analyser.fftSize=256;
+  analyser.smoothingTimeConstant=0.8;
+  data=new Uint8Array(analyser.frequencyBinCount);
+  masterGain=audioCtx.createGain();
+  masterGain.gain.value=+$('#master').value;
+  masterGain.connect(analyser);
+  analyser.connect(audioCtx.destination);
+}
+
+function buildDeckNodes(k){
+  ensureAudio();
+  if(deckNodes[k]) return deckNodes[k];
+  const el=$('#audio'+k);
+  const src=audioCtx.createMediaElementSource(el);
+  const low=audioCtx.createBiquadFilter(); low.type='lowshelf'; low.frequency.value=320; low.gain.value=0;
+  const mid=audioCtx.createBiquadFilter(); mid.type='peaking'; mid.frequency.value=1000; mid.Q.value=0.7; mid.gain.value=0;
+  const high=audioCtx.createBiquadFilter(); high.type='highshelf'; high.frequency.value=3200; high.gain.value=0;
+  const deckGain=audioCtx.createGain(); deckGain.gain.value=1;
+  const xfGain=audioCtx.createGain(); xfGain.gain.value=0.5;
+  src.connect(low); low.connect(mid); mid.connect(high); high.connect(deckGain); deckGain.connect(xfGain); xfGain.connect(masterGain);
+  const nodes={src,low,mid,high,deckGain,xfGain};
+  deckNodes[k]=nodes;
+  connected[k]=true;
+  return nodes;
+}
+
+function applyCrossfade(){
+  if(!deckNodes.A||!deckNodes.B) return;
+  const v=+$('#xf').value;
+  const m=+$('#master').value;
+  const a=Math.cos(v*Math.PI/2);
+  const b=Math.sin(v*Math.PI/2);
+  deckNodes.A.xfGain.gain.setTargetAtTime(a, audioCtx.currentTime, 0.01);
+  deckNodes.B.xfGain.gain.setTargetAtTime(b, audioCtx.currentTime, 0.01);
+  if(masterGain) masterGain.gain.setTargetAtTime(m, audioCtx.currentTime, 0.01);
+}
+
+function applyEQ(k){
+  const n=deckNodes[k]; if(!n) return;
+  const g=+$('#gain'+k).value;
+  const lo=+$('#low'+k).value*12;
+  const mi=+$('#mid'+k).value*12;
+  const hi=+$('#high'+k).value*12;
+  n.deckGain.gain.setTargetAtTime(g, audioCtx.currentTime, 0.02);
+  n.low.gain.setTargetAtTime(lo, audioCtx.currentTime, 0.02);
+  n.mid.gain.setTargetAtTime(mi, audioCtx.currentTime, 0.02);
+  n.high.gain.setTargetAtTime(hi, audioCtx.currentTime, 0.02);
+}
+
+function renderLib(){
+  const view=$('#mediaView');
+  view.innerHTML=items.length?items.map(x=>`<div class="item"><b>${esc(x.name)}</b> <span class="pill">${x.kind}</span><div class="actions"><button class="btn" data-a="${x.id}">A: Track</button><button class="btn" data-av="${x.id}">A: Video</button><button class="btn" data-b="${x.id}">B: Track</button><button class="btn" data-bv="${x.id}">B: Video</button><button class="btn" data-pa="${x.id}">＋ Playlist A</button><button class="btn" data-pb="${x.id}">＋ Playlist B</button><button class="btn danger" data-del="${x.id}">Delete</button></div></div>`).join(''):'<div class="small">Library is empty. Upload audio or video.</div>';
+  view.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>assignFromLib('A','track',b.dataset.a));
+  view.querySelectorAll('[data-av]').forEach(b=>b.onclick=()=>assignFromLib('A','video',b.dataset.av));
+  view.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>assignFromLib('B','track',b.dataset.b));
+  view.querySelectorAll('[data-bv]').forEach(b=>b.onclick=()=>assignFromLib('B','video',b.dataset.bv));
+  view.querySelectorAll('[data-pa]').forEach(b=>b.onclick=()=>addPlaylist('A',b.dataset.pa));
+  view.querySelectorAll('[data-pb]').forEach(b=>b.onclick=()=>addPlaylist('B',b.dataset.pb));
+  view.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>delItem(b.dataset.del));
+}
+
+async function delItem(id){
+  items=items.filter(i=>i.id!==id);
+  await dbDel(id);
+  if(A.track?.id===id)A.track=null; if(A.video?.id===id)A.video=null;
+  if(B.track?.id===id)B.track=null; if(B.video?.id===id)B.video=null;
+  A.playlist=A.playlist.filter(x=>x!==id); B.playlist=B.playlist.filter(x=>x!==id);
+  saveState(); setInfo('A'); setInfo('B'); renderLib(); say('Deleted from library.');
+}
+
+async function addFile(f){
+  const x={id:uid(),name:f.name,kind:f.type.startsWith('video')?'video':'audio',blob:f};
+  items.push(x); await dbPut(x); return x;
+}
+
+async function assignFromLib(k,type,id){
+  const x=items.find(i=>i.id===id); if(!x) return;
+  const d=k==='A'?A:B; d[type]=x;
+  if(type==='track'){
+    const el=$('#audio'+k);
+    if(el.src && el.src.startsWith('blob:')) URL.revokeObjectURL(el.src);
+    el.src=URL.createObjectURL(x.blob); el.load();
+    if(!connected[k]) buildDeckNodes(k);
+  }
+  setInfo(k); say(x.name+' assigned to Deck '+k+' as '+type+'.');
+}
+
+function setInfo(k){
+  const d=k==='A'?A:B;
+  $('#info'+k).innerHTML=`<b>Track:</b> ${esc(d.track?.name||'—')}<br><b>Video:</b> ${esc(d.video?.name||'—')}`;
+  renderSelect(k);
+}
+
+function renderSelect(k){
+  const d=k==='A'?A:B; const s=$('#sel'+k);
+  s.innerHTML='<option value="">Playlist / choose media…</option>'+d.playlist.map((id,i)=>{
+    const x=items.find(q=>q.id===id);
+    return x?`<option value="${id}" ${i===d.index?'selected':''}>${i+1}. ${esc(x.name)}</option>`:'';
+  }).join('');
+}
+
+async function playTrack(k){
+  const d=k==='A'?A:B, e=$('#audio'+k);
+  if(!d.track){say('Assign a track to Deck '+k+' first.'); return}
+  try{
+    ensureAudio();
+    if(!connected[k]) buildDeckNodes(k);
+    applyEQ(k); applyCrossfade();
+    await audioCtx.resume();
+    await e.play();
+    say('Deck '+k+' playing.');
+  }catch(err){say('Tap Play '+k+' again (browser needs a gesture).')}
+}
+
+function stop(k){const e=$('#audio'+k); e.pause(); e.currentTime=0}
+
+function show(k){
+  const d=k==='A'?A:B;
+  if(!d.video){say('Assign a video to Deck '+k+' first.'); return}
+  const v=$('#videoStage');
+  if(v.src && v.src.startsWith('blob:')) URL.revokeObjectURL(v.src);
+  v.src=URL.createObjectURL(d.video.blob); v.hidden=false;
+  $('#stageLabel').textContent='Deck '+k+' Video';
+  v.play().catch(()=>{});
+}
+
+function next(k,dir=1){
+  const d=k==='A'?A:B;
+  if(!d.playlist.length) return;
+  let n=d.index+dir;
+  if(shuffle) n=Math.floor(Math.random()*d.playlist.length);
+  if(n>=d.playlist.length){if(repeat) n=0; else return}
+  if(n<0) n=d.playlist.length-1;
+  d.index=n;
+  const x=items.find(q=>q.id===d.playlist[n]);
+  if(x){
+    if(x.kind==='video'){d.video=x; show(k)}
+    else{
+      d.track=x;
+      const el=$('#audio'+k);
+      if(el.src && el.src.startsWith('blob:')) URL.revokeObjectURL(el.src);
+      el.src=URL.createObjectURL(x.blob); el.load();
+      if(!connected[k]) buildDeckNodes(k);
+    }
+    setInfo(k);
+  }
+}
+
+function addPlaylist(k,id){
+  const d=k==='A'?A:B;
+  if(!d.playlist.includes(id)) d.playlist.push(id);
+  if(d.index<0) d.index=0;
+  saveState(); renderSelect(k); renderPlaylists(k); say('Added to Playlist '+k);
+}
+
+function renderPlaylists(k){
+  const d=k==='A'?A:B;
+  $('#mediaView').innerHTML='<div class="playlist">'+(d.playlist.length?d.playlist.map((id,i)=>{
+    const x=items.find(q=>q.id===id);
+    return x?`<div class="plrow"><span>${i+1}. ${esc(x.name)}</span><button class="btn" data-load="${id}">Load</button><button class="btn" data-rm="${id}">✕</button></div>`:'';
+  }).join(''):'<div class="small">Playlist '+k+' is empty. Use ＋ Playlist '+k+' from Media.</div>')+'</div><div class="row" style="margin-top:8px"><button class="btn" id="backMedia">← Media</button><button class="btn" id="clearPl">Clear Playlist '+k+'</button></div>';
+  $('#mediaView').querySelectorAll('[data-load]').forEach(b=>b.onclick=()=>{
+    const x=items.find(q=>q.id===b.dataset.load);
+    if(x){
+      const dd=k==='A'?A:B;
+      if(x.kind==='video'){dd.video=x; show(k)}
+      else{
+        dd.track=x; dd.index=dd.playlist.indexOf(x.id);
+        const el=$('#audio'+k);
+        if(el.src && el.src.startsWith('blob:')) URL.revokeObjectURL(el.src);
+        el.src=URL.createObjectURL(x.blob); el.load();
+        if(!connected[k]) buildDeckNodes(k);
+      }
+      setInfo(k);
+    }
+  });
+  $('#mediaView').querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{
+    d.playlist=d.playlist.filter(id=>id!==b.dataset.rm); saveState(); renderPlaylists(k);
+  });
+  $('#backMedia').onclick=renderLib;
+  $('#clearPl').onclick=()=>{d.playlist=[]; d.index=-1; saveState(); renderPlaylists(k)};
+}
+
+function draw(){
+  const c=$('#viz'), ctx=c.getContext('2d');
+  const dpr=devicePixelRatio||1;
+  c.width=c.clientWidth*dpr; c.height=c.clientHeight*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const w=c.clientWidth, h=c.clientHeight;
+  ctx.clearRect(0,0,w,h);
+  let level=.12;
+  if(analyser && data){
+    analyser.getByteFrequencyData(data);
+    let sum=0; for(let i=0;i<data.length;i++) sum+=data[i];
+    level=sum/data.length/255;
+  }
+  const react=+$('#react').value, hue=+$('#hue').value, amp=8+level*90*react;
+  ctx.lineWidth=2;
+  ctx.strokeStyle=`hsl(${hue} 100% 65%)`;
+  ctx.fillStyle=`hsla(${hue} 100% 65% / .38)`;
+  phase+=.016;
+  const n=48;
+  for(let i=0;i<n;i++){
+    const v=data?data[i%data.length]/255:.12;
+    const bar=v*h*.62+6;
+    const x=i*w/n;
+    if(vizName==='Bars'||vizName==='Aurora'||vizName==='Lattice'){
+      ctx.fillRect(x,h-bar,w/n-2,bar);
+    }else if(vizName==='Radial'||vizName==='Rings'||vizName==='Kaleidoscope'){
+      const a=i/n*Math.PI*2, r=40+v*amp*3;
+      ctx.beginPath(); ctx.arc(w/2+Math.cos(a)*r,h/2+Math.sin(a)*r,2.5+v*amp/5,0,7); ctx.fill();
+    }else if(vizName==='Wave'||vizName==='Pulse'){
+      if(i===0){ctx.beginPath(); ctx.moveTo(0,h/2)}
+      for(let x2=0;x2<w;x2+=8){
+        const y=h/2+Math.sin(x2*.024+phase*3)*amp*(.25+v);
+        ctx.lineTo(x2,y);
+      }
+      if(i===0) ctx.stroke();
+      break;
+    }else if(vizName==='Starfield'||vizName==='Particles'||vizName==='Nebula'||vizName==='Matrix'){
+      const px=(i*97+phase*80)%w, py=(i*53+phase*40)%h, s=1.8+v*amp/9;
+      ctx.beginPath(); ctx.arc(px,py,s,0,7); ctx.fill();
+    }else{
+      ctx.beginPath(); ctx.arc(w/2,h/2,45+i*2.8+v*amp,0,7); ctx.stroke();
+    }
+  }
+  if(autoViz && level>0.45 && Math.random()<0.02){
+    vizName=vizNames[Math.floor(Math.random()*vizNames.length)];
+    $$('#vizTabs .tab').forEach((t,i)=>t.classList.toggle('on',t.textContent===vizName));
+  }
+  raf=requestAnimationFrame(draw);
+}
+
+// Tabs
+$$('.tabs .tab').forEach(t=>t.onclick=()=>{
+  const m=t.dataset.mode;
+  $$('.tabs .tab').forEach(x=>x.classList.remove('on')); t.classList.add('on');
+  if(m==='playA') renderPlaylists('A');
+  else if(m==='playB') renderPlaylists('B');
+  else renderLib();
+});
+
+// Viz tabs
+vizNames.forEach(n=>{
+  const b=document.createElement('button'); b.className='tab'; b.textContent=n;
+  b.onclick=()=>{vizName=n; $$('#vizTabs .tab').forEach(x=>x.classList.remove('on')); b.classList.add('on'); say('Visualizer: '+n); saveState()};
+  $('#vizTabs').appendChild(b);
+});
+$$('#vizTabs .tab')[0].classList.add('on');
+
+// Upload / library
+$('#upload').onchange=async e=>{
+  for(const f of e.target.files) await addFile(f);
+  e.target.value=''; renderLib(); say('Media saved to local Library.');
+};
+$('#saveLib').onclick=()=>{saveState(); say('Playlists and settings saved locally.')};
+$('#clearLib').onclick=async()=>{
+  if(!confirm('Delete all local media?')) return;
+  items=[]; const tx=db.transaction('media','readwrite'); tx.objectStore('media').clear();
+  A={track:null,video:null,index:-1,playlist:[]}; B={track:null,video:null,index:-1,playlist:[]};
+  saveState(); renderLib(); setInfo('A'); setInfo('B');
+};
+
+// Per-deck wiring
+for(const k of ['A','B']){
+  ['track','video'].forEach(type=>$('#'+type+k).onchange=async e=>{
+    const f=e.target.files[0]; if(!f) return;
+    const x=await addFile(f);
+    (k==='A'?A:B)[type]=x;
+    if(type==='track'){
+      const el=$('#audio'+k);
+      if(el.src && el.src.startsWith('blob:')) URL.revokeObjectURL(el.src);
+      el.src=URL.createObjectURL(x.blob); el.load();
+      if(!connected[k]) buildDeckNodes(k);
+    }
+    setInfo(k); renderLib(); e.target.value=''; say(f.name+' assigned to Deck '+k+'.');
+  });
+  $('#sel'+k).onchange=e=>{
+    const x=items.find(q=>q.id===e.target.value);
+    if(x){
+      const d=k==='A'?A:B; d.index=d.playlist.indexOf(x.id);
+      if(x.kind==='video'){d.video=x; show(k)}
+      else{
+        d.track=x;
+        const el=$('#audio'+k);
+        if(el.src && el.src.startsWith('blob:')) URL.revokeObjectURL(el.src);
+        el.src=URL.createObjectURL(x.blob); el.load();
+        if(!connected[k]) buildDeckNodes(k);
+      }
+      setInfo(k);
+    }
+  };
+  $('#play'+k).onclick=()=>playTrack(k);
+  $('#stop'+k).onclick=()=>stop(k);
+  $('#show'+k).onclick=()=>show(k);
+  $('#vol'+k).oninput=e=>{ $('#audio'+k).volume=+e.target.value };
+  $('#mute'+k).onclick=()=>{const e=$('#audio'+k); e.muted=!e.muted; $('#mute'+k).textContent=e.muted?'🔊':'🔇'};
+  ['gain','low','mid','high'].forEach(p=>{
+    $('#'+p+k).oninput=()=>{ if(connected[k]) applyEQ(k) };
+  });
+}
+
+// Master controls
+$('#playBoth').onclick=async()=>{
+  if(!A.track||!B.track) return say('Assign a track to both decks first.');
+  await Promise.all([playTrack('A'),playTrack('B')]);
+  say('✓ A + B playing simultaneously.');
+};
+$('#stopBoth').onclick=()=>{stop('A'); stop('B'); $('#videoStage').pause()};
+$('#repeat').onclick=()=>{repeat=!repeat; $('#repeat').textContent='🔁 Repeat: '+(repeat?'On':'Off'); saveState()};
+$('#shuffle').onclick=()=>{shuffle=!shuffle; $('#shuffle').textContent='🔀 Shuffle: '+(shuffle?'On':'Off'); saveState()};
+$('#autoViz').onclick=()=>{autoViz=!autoViz; $('#autoViz').textContent='✨ Auto Visuals: '+(autoViz?'On':'Off')};
+$('#nextA').onclick=()=>next('A',1); $('#nextB').onclick=()=>next('B',1);
+$('#prevA').onclick=()=>next('A',-1); $('#prevB').onclick=()=>next('B',-1);
+$('#xf').oninput=()=>{applyCrossfade()};
+$('#master').oninput=()=>{applyCrossfade()};
+$('#full').onclick=()=>$('#stage').requestFullscreen?.();
+
+// Seek / ended
+$('#audioA').ontimeupdate=()=>{$('#masterSeek').value=$('#audioA').duration?$('#audioA').currentTime/$('#audioA').duration:0};
+$('#audioA').onended=()=>next('A');
+$('#audioB').onended=()=>next('B');
+$('#masterSeek').oninput=e=>{
+  const t=+e.target.value;
+  if($('#audioA').duration) $('#audioA').currentTime=t*$('#audioA').duration;
+  if($('#audioB').duration) $('#audioB').currentTime=t*$('#audioB').duration;
+};
+
+// Boot
+(async()=>{
+  await initDB();
+  items=await dbAll();
+  loadState();
+  setInfo('A'); setInfo('B');
+  renderLib();
+  draw();
+  say('Cadence ready — assign tracks and hit Play. Visualizer + EQ now live.');
+})();
+})();
 </script></body></html>
