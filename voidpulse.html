@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VOIDPULSE — Visualizer / DJ Studio</title>
+<style>
+  :root {
+    --bg: #07060a;
+    --panel: #12101a;
+    --ink: #f4ecff;
+    --muted: #9b90b0;
+    --line: #2a2438;
+    --accent: #c84bff;
+    --cyan: #3cf0d4;
+    --warn: #ff5c7a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 13px/1.45 "IBM Plex Sans", "Segoe UI", sans-serif; }
+  header {
+    display: flex; align-items: center; gap: 16px; padding: 10px 16px;
+    border-bottom: 1px solid var(--line); background: #0c0a12;
+  }
+  .logo { font-weight: 800; letter-spacing: .18em; font-size: 13px; }
+  .logo span { color: var(--accent); }
+  .pill { font-size: 10px; border: 1px solid var(--line); padding: 3px 8px; border-radius: 99px; color: var(--muted); }
+  .wrap { display: grid; grid-template-columns: 280px 1fr 300px; height: calc(100% - 46px); }
+  aside, .rail { background: var(--panel); border-right: 1px solid var(--line); overflow: auto; padding: 14px; }
+  .rail { border-right: 0; border-left: 1px solid var(--line); }
+  h3 { margin: 0 0 10px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .stage { position: relative; background: #000; display: flex; flex-direction: column; }
+  canvas, video#clip { width: 100%; height: calc(100% - 92px); object-fit: contain; background: #000; }
+  video#clip { position: absolute; inset: 0 0 92px 0; width: 100%; height: auto; opacity: .35; pointer-events: none; }
+  .transport {
+    height: 92px; border-top: 1px solid var(--line); background: #0c0a12;
+    display: grid; grid-template-columns: 1fr; padding: 8px 12px; gap: 6px;
+  }
+  .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  button, select, input[type=text], textarea {
+    background: #1a1624; color: var(--ink); border: 1px solid var(--line);
+    border-radius: 8px; padding: 7px 10px;
+  }
+  button { cursor: pointer; }
+  button.primary { background: linear-gradient(90deg, #7a2bff, #c84bff); border: 0; font-weight: 700; }
+  button.danger { background: #3a1220; border-color: #5a2030; color: #ff8aa0; }
+  input[type=range] { width: 120px; }
+  textarea { width: 100%; min-height: 72px; resize: vertical; }
+  .drop {
+    border: 1px dashed #3a3350; border-radius: 10px; padding: 12px; text-align: center;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .drop.hot { border-color: var(--accent); color: var(--ink); }
+  .list { display: flex; flex-direction: column; gap: 6px; }
+  .card {
+    background: #171422; border: 1px solid var(--line); border-radius: 8px; padding: 8px;
+    cursor: pointer;
+  }
+  .card small { color: var(--muted); display: block; }
+  .log { font-size: 11px; color: var(--muted); max-height: 180px; overflow: auto; }
+  .log div { border-bottom: 1px solid #1c1826; padding: 4px 0; }
+  @media (max-width: 980px) {
+    .wrap { grid-template-columns: 1fr; height: auto; }
+    canvas, video#clip { height: 42vh; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">VOID<span>PULSE</span></div>
+  <span class="pill">visualizer · dj · recorder · local projects</span>
+  <span class="pill" id="status">idle</span>
+</header>
+<div class="wrap">
+  <aside>
+    <h3>Media</h3>
+    <div class="drop" id="drop">Drop audio / video here or
+      <br><button onclick="pick('media')">Upload media</button>
+      <button onclick="pick('track')">Upload replacement track</button>
+    </div>
+    <input id="mediaIn" type="file" accept="audio/*,video/*" hidden />
+    <input id="trackIn" type="file" accept="audio/*" hidden />
+    <div class="row">
+      <label><input type="checkbox" id="muteOrig" /> Mute original video audio</label>
+    </div>
+    <div class="row">
+      <span>Master</span><input id="vol" type="range" min="0" max="1" step="0.01" value="0.85" />
+    </div>
+    <h3>Prompt / AI mode</h3>
+    <textarea id="prompt" placeholder="Optional: neon rain over a ruined cathedral, lyrics about obsession, beat-synced cuts..."></textarea>
+    <div class="row">
+      <select id="engine">
+        <option value="auto">Default AI machine</option>
+        <option value="nano">Nano Vanna</option>
+        <option value="veevo">Veevo</option>
+        <option value="soraish">Sora-ish stream</option>
+      </select>
+    </div>
+    <div class="row">
+      <button class="primary" onclick="applyPrompt()">Apply prompt</button>
+      <button onclick="genBatch()">Generate 4 variants</button>
+    </div>
+    <h3>Visualizer</h3>
+    <select id="viz">
+      <option value="bars">Spectrum bars</option>
+      <option value="orbit">Orbit rings</option>
+      <option value="storm">Particle storm</option>
+      <option value="lyric">Lyric pulse</option>
+      <option value="glitch">Glitch tunnel</option>
+    </select>
+    <h3>Projects (this browser)</h3>
+    <div class="row">
+      <input id="projName" type="text" placeholder="Project name" />
+      <button onclick="saveProject()">Save</button>
+    </div>
+    <div class="list" id="projects"></div>
+  </aside>
+  <section class="stage">
+    <video id="clip" playsinline muted></video>
+    <canvas id="cv"></canvas>
+    <div class="transport">
+      <div class="row">
+        <button class="primary" onclick="togglePlay()">Play / Pause</button>
+        <button onclick="stopAll()">Stop</button>
+        <button id="recBtn" class="danger" onclick="toggleRec()">Record visualization</button>
+        <button onclick="downloadLast()" id="dlBtn" disabled>Download last take</button>
+      </div>
+      <div class="row">
+        <input id="seek" type="range" min="0" max="1000" value="0" style="flex:1" />
+        <span id="time">0:00 / 0:00</span>
+      </div>
+    </div>
+  </section>
+  <aside class="rail">
+    <h3>Mini DJ</h3>
+    <div class="row"><span>Deck A rate</span><input id="rateA" type="range" min="0.5" max="1.5" step="0.01" value="1" /></div>
+    <div class="row"><span>Deck B gain</span><input id="gainB" type="range" min="0" max="1" step="0.01" value="0" /></div>
+    <div class="row"><span>Filter</span><input id="filter" type="range" min="200" max="12000" step="10" value="12000" /></div>
+    <p class="pill">Deck B is your replacement track. Crossfade with Deck B gain. Mute original with the checkbox.</p>
+    <h3>Generated streams</h3>
+    <div class="list" id="variants"></div>
+    <h3>Activity log</h3>
+    <div class="log" id="log"></div>
+  </aside>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const canvas = $("cv");
+const ctx = canvas.getContext("2d");
+const video = $("clip");
+let audioCtx, analyser, sourceA, sourceB, gainA, gainB, filterNode, dest;
+let mediaEl, trackEl, recChunks = [], recorder, lastBlob;
+let anim, energy = 0, hueShift = 0;
+let promptTheme = { words: ["void","pulse"], mood: "auto", engine: "auto" };
+const LS_LOG = "voidpulse-log";
+const LS_PROJ = "voidpulse-projects";
+
+function log(msg) {
+  const items = JSON.parse(localStorage.getItem(LS_LOG) || "[]");
+  items.unshift({ t: new Date().toISOString(), msg });
+  localStorage.setItem(LS_LOG, JSON.stringify(items.slice(0, 80)));
+  renderLog();
+  $("status").textContent = msg;
+}
+function renderLog() {
+  const items = JSON.parse(localStorage.getItem(LS_LOG) || "[]");
+  $("log").innerHTML = items.map(i => `<div>${i.t.slice(11,19)} — ${i.msg}</div>`).join("") || "<div>no activity yet</div>";
+}
+function renderProjects() {
+  const list = JSON.parse(localStorage.getItem(LS_PROJ) || "[]");
+  $("projects").innerHTML = list.map((p,i) =>
+    `<div class="card" onclick="loadProject(${i})"><b>${p.name}</b><small>${p.updated} · ${p.viz} · ${p.engine}</small></div>`
+  ).join("") || "<small>No saved projects in this browser.</small>";
+}
+function saveProject() {
+  const name = $("projName").value.trim() || "untitled " + new Date().toLocaleString();
+  const list = JSON.parse(localStorage.getItem(LS_PROJ) || "[]");
+  list.unshift({
+    name, updated: new Date().toLocaleString(),
+    viz: $("viz").value, engine: $("engine").value,
+    prompt: $("prompt").value, mute: $("muteOrig").checked,
+    vol: $("vol").value, filter: $("filter").value
+  });
+  localStorage.setItem(LS_PROJ, JSON.stringify(list.slice(0, 40)));
+  log("saved project " + name);
+  renderProjects();
+}
+function loadProject(i) {
+  const p = JSON.parse(localStorage.getItem(LS_PROJ) || "[]")[i];
+  if (!p) return;
+  $("projName").value = p.name;
+  $("viz").value = p.viz;
+  $("engine").value = p.engine;
+  $("prompt").value = p.prompt || "";
+  $("muteOrig").checked = !!p.mute;
+  $("vol").value = p.vol ?? 0.85;
+  $("filter").value = p.filter ?? 12000;
+  applyPrompt();
+  log("loaded " + p.name);
+}
+function pick(kind) { (kind === "track" ? $("trackIn") : $("mediaIn")).click(); }
+$("mediaIn").onchange = (e) => loadMedia(e.target.files[0], "media");
+$("trackIn").onchange = (e) => loadMedia(e.target.files[0], "track");
+const drop = $("drop");
+["dragover","dragenter"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("hot"); }));
+["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("hot"); }));
+drop.addEventListener("drop", e => {
+  const f = e.dataTransfer.files[0];
+  if (f) loadMedia(f, f.type.startsWith("audio") && mediaEl ? "track" : "media");
+});
+
+function ensureAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 1024;
+  gainA = audioCtx.createGain();
+  gainB = audioCtx.createGain();
+  filterNode = audioCtx.createBiquadFilter();
+  filterNode.type = "lowpass";
+  dest = audioCtx.createMediaStreamDestination();
+  gainA.connect(filterNode);
+  gainB.connect(filterNode);
+  filterNode.connect(analyser);
+  analyser.connect(audioCtx.destination);
+  analyser.connect(dest);
+}
+
+async function loadMedia(file, role) {
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  ensureAudio();
+  if (role === "track") {
+    if (trackEl) trackEl.pause();
+    trackEl = new Audio(url);
+    trackEl.crossOrigin = "anonymous";
+    if (sourceB) try { sourceB.disconnect(); } catch {}
+    sourceB = audioCtx.createMediaElementSource(trackEl);
+    sourceB.connect(gainB);
+    gainB.gain.value = +$("gainB").value;
+    log("replacement track: " + file.name);
+    return;
+  }
+  const isVid = file.type.startsWith("video");
+  if (mediaEl && mediaEl !== video) mediaEl.pause();
+  if (isVid) {
+    video.src = url;
+    video.muted = $("muteOrig").checked;
+    mediaEl = video;
+    video.style.opacity = "0.38";
+  } else {
+    video.removeAttribute("src");
+    video.style.opacity = "0";
+    mediaEl = new Audio(url);
+    mediaEl.crossOrigin = "anonymous";
+  }
+  mediaEl.onloadedmetadata = () => tickTime();
+  mediaEl.ontimeupdate = tickTime;
+  if (sourceA) try { sourceA.disconnect(); } catch {}
+  try {
+    sourceA = audioCtx.createMediaElementSource(mediaEl);
+    sourceA.connect(gainA);
+  } catch (err) {
+    log("media graph already bound — reload page to rewire this file");
+  }
+  applyMute();
+  log("loaded media: " + file.name);
+  startViz();
+}
+
+function applyMute() {
+  if (!mediaEl) return;
+  const mute = $("muteOrig").checked;
+  if (mediaEl === video) video.muted = mute;
+  if (gainA) gainA.gain.value = mute && mediaEl === video ? 0 : +$("vol").value;
+}
+$("muteOrig").onchange = applyMute;
+$("vol").oninput = () => { if (gainA && !($("muteOrig").checked && mediaEl === video)) gainA.gain.value = +$("vol").value; };
+$("gainB").oninput = () => { if (gainB) gainB.gain.value = +$("gainB").value; };
+$("filter").oninput = () => { if (filterNode) filterNode.frequency.value = +$("filter").value; };
+$("rateA").oninput = () => { if (mediaEl) mediaEl.playbackRate = +$("rateA").value; };
+$("seek").oninput = () => {
+  if (!mediaEl || !mediaEl.duration) return;
+  mediaEl.currentTime = (+$("seek").value / 1000) * mediaEl.duration;
+  if (trackEl) trackEl.currentTime = mediaEl.currentTime;
+};
+
+function fmt(t) {
+  t = Math.max(0, t || 0);
+  return Math.floor(t/60) + ":" + String(Math.floor(t%60)).padStart(2,"0");
+}
+function tickTime() {
+  if (!mediaEl) return;
+  $("time").textContent = fmt(mediaEl.currentTime) + " / " + fmt(mediaEl.duration);
+  if (mediaEl.duration) $("seek").value = (mediaEl.currentTime / mediaEl.duration) * 1000;
+}
+
+async function togglePlay() {
+  ensureAudio();
+  if (audioCtx.state === "suspended") await audioCtx.resume();
+  if (!mediaEl) { log("upload a file first"); return; }
+  if (mediaEl.paused) {
+    await mediaEl.play();
+    if (trackEl) { trackEl.currentTime = mediaEl.currentTime; trackEl.play(); }
+    startViz();
+    log("playing");
+  } else {
+    mediaEl.pause();
+    if (trackEl) trackEl.pause();
+    log("paused");
+  }
+}
+function stopAll() {
+  if (mediaEl) { mediaEl.pause(); mediaEl.currentTime = 0; }
+  if (trackEl) { trackEl.pause(); trackEl.currentTime = 0; }
+  log("stopped");
+}
+
+function applyPrompt() {
+  const text = $("prompt").value.trim();
+  const engine = $("engine").value;
+  const words = text ? text.toLowerCase().split(/[^a-z0-9]+/).filter(w => w.length > 2) : ["pulse","void","neon"];
+  let mood = "auto";
+  if (/rage|dark|blood|ruin|obsess/.test(text)) mood = "dark";
+  else if (/soft|dream|love|warm/.test(text)) mood = "warm";
+  else if (/glitch|cyber|neon|night/.test(text)) mood = "cyber";
+  promptTheme = { words, mood, engine, text };
+  if (engine === "nano") $("viz").value = "orbit";
+  if (engine === "veevo") $("viz").value = "storm";
+  if (engine === "soraish") $("viz").value = "glitch";
+  hueShift = mood === "dark" ? 320 : mood === "warm" ? 20 : mood === "cyber" ? 280 : 200;
+  log("prompt locked · " + engine + " · " + mood);
+}
+function genBatch() {
+  applyPrompt();
+  const modes = ["bars","orbit","storm","lyric","glitch"];
+  const engines = ["auto","nano","veevo","soraish"];
+  $("variants").innerHTML = "";
+  for (let i = 0; i < 4; i++) {
+    const v = modes[(i + modes.indexOf($("viz").value)) % modes.length];
+    const e = engines[i];
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `<b>Variant ${i+1}</b><small>${e} · ${v}</small>`;
+    card.onclick = () => { $("engine").value = e; $("viz").value = v; applyPrompt(); log("switched to variant " + (i+1)); };
+    $("variants").appendChild(card);
+  }
+  log("generated 4 visual streams (procedural engines — not cloud Sora/Veo)");
+}
+
+function startViz() {
+  const resize = () => {
+    canvas.width = canvas.clientWidth * devicePixelRatio;
+    canvas.height = canvas.clientHeight * devicePixelRatio;
+  };
+  resize();
+  window.onresize = resize;
+  cancelAnimationFrame(anim);
+  const data = new Uint8Array(analyser ? analyser.frequencyBinCount : 512);
+  const parts = Array.from({length: 120}, () => ({
+    x: Math.random(), y: Math.random(), vx: (Math.random()-.5)*.004, vy: (Math.random()-.5)*.004
+  }));
+  function frame() {
+    anim = requestAnimationFrame(frame);
+    const w = canvas.width, h = canvas.height;
+    if (analyser) analyser.getByteFrequencyData(data);
+    let sum = 0;
+    for (let i = 0; i < data.length; i++) sum += data[i];
+    energy = energy * 0.8 + (sum / (data.length * 255)) * 0.2;
+    const beat = energy > 0.22;
+    ctx.fillStyle = `rgba(4,3,8,${beat ? 0.18 : 0.32})`;
+    ctx.fillRect(0,0,w,h);
+    const mode = $("viz").value;
+    const words = promptTheme.words;
+    if (mode === "bars") {
+      const n = 64;
+      const bw = w / n;
+      for (let i = 0; i < n; i++) {
+        const v = (data[i] || 0) / 255;
+        ctx.fillStyle = `hsl(${hueShift + i*3 + energy*80}, 90%, ${40+v*40}%)`;
+        ctx.fillRect(i*bw, h - v*h, bw-1, v*h);
+      }
+    } else if (mode === "orbit") {
+      ctx.save();
+      ctx.translate(w/2, h/2);
+      for (let r = 0; r < 7; r++) {
+        ctx.beginPath();
+        ctx.strokeStyle = `hsla(${hueShift+r*18},90%,60%,.7)`;
+        ctx.lineWidth = 2 + energy*8;
+        ctx.arc(0,0, 40+r*28 + energy*80, 0, Math.PI*2);
+        ctx.stroke();
+      }
+      ctx.restore();
+    } else if (mode === "storm") {
+      parts.forEach(p => {
+        p.x += p.vx + (energy-0.1)*0.01;
+        p.y += p.vy;
+        if (p.x<0||p.x>1) p.vx*=-1;
+        if (p.y<0||p.y>1) p.vy*=-1;
+        ctx.fillStyle = `hsla(${hueShift + energy*120},100%,60%,.85)`;
+        ctx.beginPath();
+        ctx.arc(p.x*w, p.y*h, 1.5 + energy*8, 0, Math.PI*2);
+        ctx.fill();
+      });
+    } else if (mode === "lyric") {
+      ctx.fillStyle = `hsla(${hueShift},90%,70%,.9)`;
+      ctx.font = `${18 + energy*60}px sans-serif`;
+      ctx.textAlign = "center";
+      const word = words[Math.floor(performance.now()/400 + energy*10) % words.length];
+      ctx.fillText(word.toUpperCase(), w/2, h/2);
+    } else {
+      for (let i = 0; i < 18; i++) {
+        ctx.strokeStyle = `hsla(${hueShift + i*10},90%,55%,.45)`;
+        ctx.strokeRect(
+          (Math.sin(performance.now()/300 + i)+1)*w*0.15,
+          (Math.cos(performance.now()/280 + i)+1)*h*0.12,
+          w*0.7*energy + 40, h*0.5*energy + 30
+        );
+      }
+    }
+    if (promptTheme.text) {
+      ctx.fillStyle = "rgba(255,255,255,.35)";
+      ctx.font = "12px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText(promptTheme.engine + " · " + promptTheme.mood, 16, 24);
+    }
+  }
+  frame();
+}
+
+async function toggleRec() {
+  if (recorder && recorder.state === "recording") {
+    recorder.stop();
+    $("recBtn").textContent = "Record visualization";
+    return;
+  }
+  if (!canvas.captureStream) { log("this browser cannot capture canvas"); return; }
+  const stream = canvas.captureStream(30);
+  if (dest) dest.stream.getAudioTracks().forEach(t => stream.addTrack(t));
+  recChunks = [];
+  recorder = new MediaRecorder(stream, { mimeType: MediaRecorder.isTypeSupported("video/webm;codecs=vp9,opus") ? "video/webm;codecs=vp9,opus" : "video/webm" });
+  recorder.ondataavailable = e => { if (e.data.size) recChunks.push(e.data); };
+  recorder.onstop = () => {
+    lastBlob = new Blob(recChunks, { type: "video/webm" });
+    $("dlBtn").disabled = false;
+    log("recording ready · " + Math.round(lastBlob.size/1024) + "kb");
+  };
+  recorder.start();
+  $("recBtn").textContent = "Stop recording";
+  log("recording live viz");
+}
+function downloadLast() {
+  if (!lastBlob) return;
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(lastBlob);
+  a.download = "voidpulse-" + Date.now() + ".webm";
+  a.click();
+  log("downloaded recording");
+}
+
+renderLog();
+renderProjects();
+ensureAudio();
+startViz();
+log("VOIDPULSE ready — files stay in this browser");
+</script>
+</body>
+</html>
