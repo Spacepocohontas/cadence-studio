@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PULSE NOIR — Visualizer / DJ Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="pulse-noir.css" />
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="top">
+    <div class="brand">
+      <span class="mark">◆</span>
+      <div>
+        <h1>PULSE NOIR</h1>
+        <p>visualizer · mini dj · music-video stream</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="btnNew" class="ghost">New project</button>
+      <button id="btnSave" class="ghost">Save project</button>
+      <select id="projectSelect"></select>
+    </div>
+  </header>
+  <main class="layout">
+    <section class="stage">
+      <div class="viewport" id="viewport">
+        <video id="mediaVideo" playsinline></video>
+        <canvas id="viz"></canvas>
+        <div class="hud" id="hud">
+          <span id="hudTitle">drop a track or clip</span>
+          <span id="hudTime">00:00 / 00:00</span>
+        </div>
+      </div>
+      <div class="transport">
+        <button id="btnPlay" class="primary">Play</button>
+        <button id="btnStop">Stop</button>
+        <input id="seek" type="range" min="0" max="1000" value="0" />
+        <label class="chk"><input id="muteOrig" type="checkbox" /> Mute original</label>
+        <button id="btnRec">● Record viz</button>
+        <button id="btnShot">Frame</button>
+      </div>
+    </section>
+    <aside class="rack">
+      <div class="card">
+        <h2>Media</h2>
+        <label class="drop" id="dropMedia">
+          <input id="fileMedia" type="file" accept="audio/*,video/*,.mp3,.mp4,.wav,.m4a,.webm,.mov,.ogg" hidden />
+          Upload audio / video
+        </label>
+        <label class="drop slim">
+          <input id="fileTrack" type="file" accept="audio/*,.mp3,.wav,.m4a,.ogg" hidden />
+          Overlay your own track
+        </label>
+        <p class="hint" id="mediaMeta">No file loaded.</p>
+      </div>
+      <div class="card">
+        <h2>DJ rack</h2>
+        <label>Master <input id="gain" type="range" min="0" max="150" value="90" /></label>
+        <label>Bass <input id="bass" type="range" min="-24" max="24" value="0" /></label>
+        <label>Mid <input id="mid" type="range" min="-24" max="24" value="0" /></label>
+        <label>Treble <input id="treble" type="range" min="-24" max="24" value="0" /></label>
+        <label>Sensitivity <input id="sens" type="range" min="20" max="220" value="100" /></label>
+      </div>
+      <div class="card">
+        <h2>Visual engine</h2>
+        <select id="mode">
+          <option value="auto">AI default — follow beats / mood</option>
+          <option value="prompt">Prompt-driven music video</option>
+          <option value="bars">Spectrum bars</option>
+          <option value="tunnel">Neon tunnel</option>
+          <option value="orbit">Orbit particles</option>
+          <option value="lyric">Lyric pulse</option>
+        </select>
+        <textarea id="prompt" rows="4" placeholder="Optional prompt: rainy neon Tokyo alley, chrome rain, lyrics as ghost type..."></textarea>
+        <label>Engine
+          <select id="engine">
+            <option value="noir">Noir Pulse (on-device)</option>
+            <option value="veevo">Veevo-style kinetic</option>
+            <option value="vanna">Nano Vanna grain</option>
+            <option value="sora">Sora-like drift</option>
+          </select>
+        </label>
+        <label>Variants <input id="variants" type="number" min="1" max="6" value="3" /></label>
+        <button id="btnGen" class="primary">Generate video streams</button>
+        <div id="variantRow" class="variants"></div>
+      </div>
+    </aside>
+  </main>
+  <section class="logwrap">
+    <h2>Activity log</h2>
+    <ul id="log"></ul>
+  </section>
+  <script src="pulse-noir.js"></script>
+</body>
+</html>
