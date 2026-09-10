@@ -1,0 +1,1 @@
+(()=>{const s=document.createElement('script');s.src='/cadence-audio-ai.js';s.defer=true;document.head.appendChild(s)})();
