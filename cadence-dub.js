@@ -73,7 +73,7 @@ function recordDub(){
   function frame(){if(!rec||rec.state==='inactive')return;x.fillStyle='#000';x.fillRect(0,0,w,h);var vw=video.videoWidth||w,vh=video.videoHeight||h,sc=Math.min(w/vw,h/vh),dw=vw*sc,dh=vh*sc;x.drawImage(video,(w-dw)/2,(h-dh)/2,dw,dh);requestAnimationFrame(frame)}
   rec.ondataavailable=function(e){if(e.data.size)chunks.push(e.data)};
   rec.onstop=function(){var blob=new Blob(chunks,{type:mime}),url=URL.createObjectURL(blob),aEl=document.createElement('a');aEl.href=url;aEl.download='cadence-dub.'+(mime.indexOf('mp4')>=0?'mp4':'webm');aEl.click();setTimeout(()=>URL.revokeObjectURL(url),5000);say('Dub recording exported.');document.getElementById('dubRecord').textContent='⏺ RECORD DUB'};
-  rec.start(250);document.getElementById('dubRecord').textContent='⏹ STOP DUB';frame();
+  rec.start(250);document.getElementById('dubRecord').textContent='⏹ STOP DUB';say('Recording dub… tap STOP DUB when finished.');frame();
   video.onended=function(){if(rec.state!=='inactive')rec.stop()};
   play();
   document.getElementById('dubRecord').onclick=function(){if(rec.state!=='inactive')rec.stop();else recordDub()};
