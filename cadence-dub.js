@@ -69,10 +69,10 @@ function recordDub(){
  try{
   var c=document.createElement('canvas'),w=1280,h=720;c.width=w;c.height=h;var x=c.getContext('2d');
   var stream=c.captureStream(30);window.CadenceRuntime.destination().stream.getAudioTracks().forEach(function(t){stream.addTrack(t)});
-  var mime=MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')?'video/webm;codecs=vp9,opus':'video/webm';var rec=new MediaRecorder(stream,{mimeType:mime}),chunks=[];
+  var types=['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4','video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];var mime=types.find(function(t){try{return MediaRecorder.isTypeSupported(t)}catch(e){return false}});if(!mime)throw Error('No supported video recording format');var rec=new MediaRecorder(stream,{mimeType:mime}),chunks=[];
   function frame(){if(!rec||rec.state==='inactive')return;x.fillStyle='#000';x.fillRect(0,0,w,h);var vw=video.videoWidth||w,vh=video.videoHeight||h,sc=Math.min(w/vw,h/vh),dw=vw*sc,dh=vh*sc;x.drawImage(video,(w-dw)/2,(h-dh)/2,dw,dh);requestAnimationFrame(frame)}
   rec.ondataavailable=function(e){if(e.data.size)chunks.push(e.data)};
-  rec.onstop=function(){var blob=new Blob(chunks,{type:mime}),url=URL.createObjectURL(blob),aEl=document.createElement('a');aEl.href=url;aEl.download='cadence-dub.webm';aEl.click();setTimeout(()=>URL.revokeObjectURL(url),5000);say('Dub recording exported.');document.getElementById('dubRecord').textContent='⏺ RECORD DUB'};
+  rec.onstop=function(){var blob=new Blob(chunks,{type:mime}),url=URL.createObjectURL(blob),aEl=document.createElement('a');aEl.href=url;aEl.download='cadence-dub.'+(mime.indexOf('mp4')>=0?'mp4':'webm');aEl.click();setTimeout(()=>URL.revokeObjectURL(url),5000);say('Dub recording exported.');document.getElementById('dubRecord').textContent='⏺ RECORD DUB'};
   rec.start(250);document.getElementById('dubRecord').textContent='⏹ STOP DUB';frame();
   video.onended=function(){if(rec.state!=='inactive')rec.stop()};
   play();
