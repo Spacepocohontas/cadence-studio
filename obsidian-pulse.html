@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>OBSIDIAN PULSE</title>
+<style>
+:root{--bg:#07070b;--panel:#101018;--ink:#efe8df;--muted:#8b8494;--accent:#c9a227;--hot:#e23b5b;--ok:#3ad29f;--line:#242430}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:Segoe UI,sans-serif}
+body{display:grid;grid-template-rows:56px 1fr 42px}
+header{display:flex;align-items:center;gap:16px;padding:0 16px;border-bottom:1px solid var(--line);background:#0c0c12}
+h1{font-size:13px;letter-spacing:.22em;margin:0}.tag{color:var(--accent);font-size:11px}
+.layout{display:grid;grid-template-columns:270px 1fr 280px;min-height:0}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+aside{background:var(--panel);border-right:1px solid var(--line);overflow:auto;padding:14px}
+.rail{border-right:0;border-left:1px solid var(--line)}
+h2{font-size:11px;letter-spacing:.16em;color:var(--muted);margin:0 0 10px}
+label{display:block;font-size:11px;color:var(--muted);margin:10px 0 4px}
+input[type=text],textarea,select{width:100%;background:#0a0a10;color:var(--ink);border:1px solid var(--line);padding:8px;border-radius:6px}
+textarea{min-height:70px}
+button,.file{background:#1a1a24;color:var(--ink);border:1px solid var(--line);padding:8px 10px;border-radius:6px;cursor:pointer;font-size:12px}
+button.primary{background:var(--accent);color:#111;font-weight:600}
+button.hot{background:var(--hot);color:#fff}button.ok{background:var(--ok);color:#062}
+button:disabled{opacity:.45}.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.stage{position:relative;background:#000;min-height:280px}
+canvas,video#clip{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+video#clip{opacity:.5;z-index:1}canvas{z-index:2}
+.hud{position:absolute;left:12px;bottom:12px;z-index:4;font-size:11px;background:#0008;padding:6px 8px}
+footer{display:flex;align-items:center;gap:10px;padding:0 12px;border-top:1px solid var(--line);font-size:12px}
+input[type=range]{flex:1}.log{font-size:11px;color:var(--muted);max-height:160px;overflow:auto;white-space:pre-wrap}
+.proj{font-size:12px;padding:6px;border:1px solid var(--line);margin-bottom:6px;cursor:pointer}
+.file input{display:none}.meter{height:8px;background:#1c1c26;border-radius:4px;overflow:hidden}
+.meter>i{display:block;height:100%;width:0;background:var(--accent)}
+</style></head>
+<body>
+<header><h1>OBSIDIAN PULSE</h1><span class="tag">VISUALIZER / DJ / LOCAL STUDIO</span><span id="clock" style="margin-left:auto;font-size:11px;color:var(--muted)"></span></header>
+<div class="layout">
+<aside>
+<h2>MEDIA</h2>
+<label class="file">Upload audio / video<input id="mediaFile" type="file" accept="audio/*,video/*"></label>
+<label class="file">Overlay track<input id="trackFile" type="file" accept="audio/*"></label>
+<div class="row"><button id="btnMuteOrig">Mute original</button><button id="btnUseTrack">Use overlay track</button></div>
+<label>Visual prompt</label>
+<textarea id="prompt" placeholder="neon rain, possessive reds, bass shatters glass..."></textarea>
+<label>Mode</label>
+<select id="mode"><option value="auto">AI auto</option><option value="bars">Bars</option><option value="orbit">Orbit</option><option value="storm">Storm</option><option value="glyph">Glyphs</option><option value="cut">Hard cut</option></select>
+<label>Intensity</label>
+<input type="range" id="intensity" min="0.3" max="2.4" step="0.05" value="1">
+<div class="row"><button class="primary" id="btnPlay">Play</button><button id="btnStop">Stop</button></div>
+<div class="row"><button class="hot" id="btnRec">Record live viz</button><button id="btnRecStop" disabled>Stop record</button></div>
+<div class="row"><button class="ok" id="btnBatch">Generate 3 variations</button></div>
+<div class="row" style="margin-top:10px"><div style="flex:1"><small>BASS</small><div class="meter"><i id="mBass"></i></div></div><div style="flex:1"><small>TREBLE</small><div class="meter"><i id="mTreble"></i></div></div></div>
+</aside>
+<section class="stage"><video id="clip" playsinline></video><canvas id="viz"></canvas><div class="hud" id="hud">drop a file</div></section>
+<aside class="rail">
+<h2>PROJECTS</h2>
+<input type="text" id="projName" placeholder="project name">
+<div class="row"><button id="btnSave">Save</button><button id="btnNew">New</button></div>
+<div id="projList"></div>
+<h2 style="margin-top:16px">ACTIVITY</h2><div class="log" id="log"></div>
+<h2 style="margin-top:16px">EXPORTS</h2><div id="exports"></div>
+</aside>
+</div>
+<footer>
+<button id="btnSeekBack">-5s</button>
+<input type="range" id="seek" min="0" max="1000" value="0">
+<button id="btnSeekFwd">+5s</button>
+<span id="time">0:00</span>
+<label>Master <input type="range" id="vol" min="0" max="1" step="0.01" value="0.85"></label>
+</footer>
+<script src="./obsidian-pulse.js"></script>
+</body></html>
