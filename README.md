@@ -28,3 +28,12 @@ Already live on Vercel. Push to `main` and it stays synced if you connect the re
 
 ---
 Cadence — form follows the beat.
+
+
+### Performance controls
+
+Every entry page includes full-app and preview fullscreen controls, with an expanded view when the browser does not support fullscreen. Escape or the visible Exit button returns to the editor. Use Random look or the 12-second automatic shuffle to change visualization styles.
+
+For music videos, open **Music video: mute & sync**, choose the loaded replacement audio, mute original video audio, and enable linked playback. A positive video delay keeps the video behind the soundtrack. Playback, seeking, and drift correction follow the replacement audio clock. Browser codec support still determines which audio and video files can play.
+
+The v3 Dub panel also offers a dedicated video-master workflow: load video on one deck and replacement audio on the other, then Play Dub. It mutes original video audio and routes the fader to the selected replacement. Render controls support the new mirror and spiral looks.

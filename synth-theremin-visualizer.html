@@ -58,4 +58,4 @@ $('fileBtn').onclick=()=>$('file').click();$('file').onchange=e=>{const f=e.targ
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.panel').forEach(x=>x.classList.toggle('on',x.id===b.dataset.tab))});
 function scopeLoop(){requestAnimationFrame(scopeLoop);if(!analyser)return;scope=$('scope');const c=scope.getContext('2d'),w=scope.clientWidth,h=scope.height;c.clearRect(0,0,w,h);const a=new Uint8Array(analyser.fftSize);analyser.getByteTimeDomainData(a);c.beginPath();for(let i=0;i<a.length;i++){const x=i/a.length*w,y=h/2+(a[i]-128)*h/256;i?c.lineTo(x,y):c.moveTo(x,y)}c.strokeStyle='#22d3ee';c.stroke()}scopeLoop();
 })();
-</script></body></html>
+</script><script src="performance-controls.js"></script></body></html>
