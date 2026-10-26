@@ -1,0 +1,27 @@
+name: AutoCut validation
+on:
+  push:
+    paths:
+      - "autocut/**"
+      - ".github/workflows/autocut-ci.yml"
+  pull_request:
+    paths:
+      - "autocut/**"
+      - ".github/workflows/autocut-ci.yml"
+permissions:
+  contents: read
+jobs:
+  engine-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+      - name: Parse browser script
+        run: node --check autocut/app.js
+      - name: Validate beat engine
+        run: npm test
+        working-directory: autocut
