@@ -63,7 +63,7 @@
       <p id="directorOutput" class="director-output" role="status">Choose a preset or describe your direction, then generate a timeline.</p>
      </section>
      <section class="panel timeline-panel"><div class="panel-heading"><div><span class="section-number">03</span><h2>Beat-synced timeline</h2></div><span class="info-chip" id="sceneCount">0 CUTS</span></div>
-      <div class="wavebar"><div class="wavebar-label"><span>MASTER AUDIO</span><span id="bpmReadout">BPM —</span></div><canvas id="waveform" width="800" height="90" aria-label="Soundtrack waveform; click to seek"></canvas><div class="wavebar-foot"><span>0:00</span><span id="waveEnd">0:00</span></div></div>
+      <div class="wavebar"><div class="wavebar-label"><span>MASTER AUDIO</span><span class="tempo-picker"><span id="bpmReadout">BPM —</span><label>ADJUST <input id="bpmInput" type="number" aria-label="Manual beats per minute" min="62" max="190" step=".1" value="120"></label></span></div><canvas id="waveform" width="800" height="90" aria-label="Soundtrack waveform; click to seek"></canvas><div class="wavebar-foot"><span>0:00</span><span id="waveEnd">0:00</span></div></div>
       <div class="timeline-label"><span>VIDEO TRACK <small>Click a segment to seek · change footage & effects below</small></span><span id="timelineDuration">0:00</span></div>
       <div id="timelineBar" class="timeline-bar"><span class="timeline-empty">Your edited shots will appear on this timeline.</span></div>
       <div id="sceneInspector" class="scene-inspector"><div class="empty-scene">Generate an edit to inspect & customize individual scenes.</div></div>
