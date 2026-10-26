@@ -28,6 +28,7 @@ async function loadAudio(file){if(!file)return;stopPreview();status('Decoding so
   $('trackTitle').textContent=file.name;$('trackInfo').textContent=state.analysis.confidence==='low'?'Quiet or complex track · tempo is approximate':'Audio analyzed · '+state.analysis.confidence+' BPM';
   $('trackLength').textContent=fmt(state.analysis.duration);
   $('bpmReadout').textContent=state.analysis.bpm.toFixed(1)+' BPM · '+state.analysis.confidence;
+  $('bpmInput').value=String(state.analysis.bpm);
   $('customDuration').value=String(Math.round(state.analysis.duration*10)/10);
   drawWave();syncLengths();status('Soundtrack loaded: '+state.analysis.bpm.toFixed(1)+' BPM ('+state.analysis.confidence+').','ok');
   if(state.media.length)createPlan(false);
@@ -109,7 +110,7 @@ function syncLengthsSafe(){const d=duration();$('songDuration').textContent=fmt(
 function setVideoMedia(m,target){if(m.kind!=='video'||!Number.isFinite(m.duration)||m.duration<=0)return;
  const desired=clamp(target%m.duration,0,Math.max(.01,m.duration-.06));
  if(Math.abs(m.el.currentTime-desired)>.19){try{m.el.currentTime=desired}catch{}}
- if(m.el.paused){m.el.play().catch(()=>{});}
+ if(state.playing||state.rendering){if(m.el.paused)m.el.play().catch(()=>{});}else if(!m.el.paused){m.el.pause();}
 }
 function drawSource(m,seg,t,alpha=1){if(!m)return;
  const elapsed=Math.max(0,t-seg.start),target=seg.sourceOffset+elapsed;
@@ -195,8 +196,9 @@ $('mediaInput').addEventListener('change',e=>{addMedia([...e.target.files]);e.ta
 function dropSupport(id,handler){const el=$(id);['dragenter','dragover'].forEach(event=>el.addEventListener(event,e=>{e.preventDefault();el.classList.add('drag-over')}));['dragleave','drop'].forEach(event=>el.addEventListener(event,e=>{e.preventDefault();el.classList.remove('drag-over')}));el.addEventListener('drop',e=>handler([...e.dataTransfer.files]))}
 dropSupport('audioDrop',files=>loadAudio(files.find(f=>f.type.startsWith('audio/'))||files[0]));
 dropSupport('mediaDrop',files=>addMedia(files));
-for(const b of styleButtons)b.addEventListener('click',()=>{chooseStyle(b.dataset.style);if(state.audioBuffer&&state.media.length)createPlan(false)});
+for(const b of styleButtons)b.addEventListener('click',()=>{chooseStyle(b.dataset.style);$('directorPrompt').value='';if(state.audioBuffer&&state.media.length)createPlan(false)});
 document.querySelectorAll('[data-prompt]').forEach(b=>b.addEventListener('click',()=>{$('directorPrompt').value=b.dataset.prompt;if(state.audioBuffer&&state.media.length)createPlan(false)}));
+$('bpmInput').addEventListener('change',()=>{if(!state.analysis)return;const b=clamp(Number($('bpmInput').value)||state.analysis.bpm,62,190);state.analysis.bpm=b;const phase=state.analysis.phase||0,beat=60/b;state.analysis.beats=[];for(let t=phase;t<state.analysis.duration;t+=beat)state.analysis.beats.push(Number(t.toFixed(4)));$('bpmReadout').textContent=b.toFixed(1)+' BPM · manual';drawWave();if(state.media.length)createPlan(false)});
 $('generateBtn').addEventListener('click',()=>createPlan(true));
 $('shuffleBtn').addEventListener('click',()=>createPlan(true));
 $('durationLock').addEventListener('change',()=>{stopPreview();syncLengths()});
