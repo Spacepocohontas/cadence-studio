@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0911"><meta name="description" content="GalaXia AutoCut Studio — local-first beat-synced music-video maker with soundtrack duration lock, timeline editing and real video export.">
+<title>GalaXia AutoCut — Beat-Synced Video Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+</head><body>
+<div class="backdrop-stars" aria-hidden="true"></div>
+<div class="app">
+ <aside class="rail">
+  <a class="logo" href="../index.html" aria-label="Cadence Studio home"><span class="logo-square">✦</span><span><b>GalaXia<span class="logo-accent">.</span></b><small>CREATIVE SYSTEM</small></span></a>
+  <div class="rail-group"><span class="rail-label">WORKSPACE</span>
+   <a class="rail-link active" href="./"><span>◈</span> AutoCut Studio <span class="mini-active">NEW</span></a>
+   <a class="rail-link" href="../index.html"><span>⊞</span> Cadence Hub</a>
+   <a class="rail-link" href="../cadence-v3.html"><span>♫</span> Audio Studio</a>
+   <a class="rail-link" href="../obsidian-pulse.html"><span>◉</span> Obsidian Pulse</a>
+   <a class="rail-link" href="../deck-mixer.html"><span>⌘</span> DJ Decks</a>
+  </div>
+  <div class="rail-group learn"><span class="rail-label">HOW IT WORKS</span>
+   <div class="step"><span>01</span><p><b>Load a track</b><small>The song is master</small></p></div>
+   <div class="step"><span>02</span><p><b>Add your footage</b><small>Video & still images</small></p></div>
+   <div class="step"><span>03</span><p><b>Generate an edit</b><small>Beats, cuts, effects</small></p></div>
+   <div class="step"><span>04</span><p><b>Export your video</b><small>Keep the full song</small></p></div>
+  </div>
+  <div class="rail-bottom"><span class="shield">♧</span><p><b>Local-first creativity</b><small>Your audio & footage stay in this browser.</small></p></div>
+ </aside>
+ <main>
+  <header class="topbar"><div class="topbar-left"><span class="crumb">GALAXIA OS</span><span class="chevron">›</span><strong>AutoCut Studio</strong><span class="beta">BETA</span></div><div class="top-actions"><span class="local-dot"></span><span class="local-text">ON-DEVICE EDITING</span><a class="top-link" href="../index.html">← Your apps</a></div></header>
+  <div class="content">
+   <section class="intro">
+    <div class="intro-copy"><div class="eyebrow"><span class="sparkle">✳</span> CREATIVE VIDEO ENGINE <span class="version">V1.0</span></div>
+    <h1>Your music sets<br><em>the rhythm.</em></h1>
+    <p>Drop in a song, add footage, & let AutoCut choreograph the visuals to your beat. Direct the edit with words, then fine-tune every moment.</p>
+    <div class="pill-row"><span>✦ Beat detection</span><span>↔ Timeline control</span><span>🔒 Song length lock</span><span>◐ Video export</span></div></div>
+    <div class="intro-art" aria-hidden="true"><div class="disc"><div class="disc-inner"><div class="disc-mid">◉</div></div></div><div class="wave-decoration"></div></div>
+   </section>
+   <div class="workspace-grid">
+    <div class="left-column">
+     <section class="panel source-panel"><div class="panel-heading"><div><span class="section-number">01</span><h2>Import your media</h2></div><span class="info-chip">LOCAL ONLY</span></div>
+      <div class="dropgrid">
+       <label id="audioDrop" class="drop-target audio-target" for="audioInput"><input id="audioInput" type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac"><span class="drop-icon">♫</span><b>Load soundtrack</b><small>MP3, WAV, M4A & supported audio</small><span class="browse">Browse audio ↗</span></label>
+       <label id="mediaDrop" class="drop-target media-target" for="mediaInput"><input id="mediaInput" type="file" accept="video/*,image/*" multiple><span class="drop-icon">▣</span><b>Add video & images</b><small>Multiple clips, photos & more</small><span class="browse">Browse footage ↗</span></label>
+      </div>
+      <div class="track-details" id="trackDetails"><div class="track-icon">♫</div><div><strong id="trackTitle">No soundtrack selected</strong><small id="trackInfo">Your song is the master timeline</small></div><span class="track-length" id="trackLength">—</span></div>
+      <div id="mediaList" class="media-list"><span class="placeholder-line">Your footage collection will appear here.</span></div>
+     </section>
+     <section class="panel direction-panel"><div class="panel-heading"><div><span class="section-number">02</span><h2>Choose an edit style</h2></div><span class="info-chip">6 CREATIVE PRESETS</span></div>
+      <div class="styles-grid" id="styleGrid">
+       <button class="style-tile selected" data-style="Bass Impact"><span class="style-icon">ϟ</span><b>Bass Impact</b><small>Hard-hitting drops</small></button>
+       <button class="style-tile" data-style="Dark Cinema"><span class="style-icon">◈</span><b>Dark Cinema</b><small>Slow, dramatic cuts</small></button>
+       <button class="style-tile" data-style="Glitchcore"><span class="style-icon">▥</span><b>Glitchcore</b><small>Distorted & frantic</small></button>
+       <button class="style-tile" data-style="Dreamwave"><span class="style-icon">✧</span><b>Dreamwave</b><small>Floaty & ethereal</small></button>
+       <button class="style-tile" data-style="90s Alt"><span class="style-icon">▤</span><b>90s Alt</b><small>VHS tape energy</small></button>
+       <button class="style-tile" data-style="Clean Social"><span class="style-icon">◫</span><b>Clean Social</b><small>Crisp, punchy edits</small></button>
+      </div>
+      <div class="director-block"><div class="director-heading"><span class="director-icon">✦</span><span><b>Creative Director</b><small>Tell the editor what to do — local prompt interpretation, no API key.</small></span></div>
+       <label class="sr-only" for="directorPrompt">Editing instructions</label><textarea id="directorPrompt" placeholder="Make it dark & cinematic. Rapid cuts on bass hits, glitchy transitions during verses, slow motion feeling before the big drop. Keep my full original song length..."></textarea>
+       <div class="director-actions"><span>TRY:</span><button data-prompt="Fast glitchy edits on every bass hit">Rapid glitch</button><button data-prompt="Dark cinematic shots with long dramatic holds">Dark cinema</button><button data-prompt="Dreamy slow motion style, soft transitions">Dreamy</button></div>
+      </div>
+      <div class="action-row"><button id="generateBtn" class="btn primary">✦ &nbsp; Generate my edit <span>→</span></button><button id="shuffleBtn" class="btn subtle" title="Regenerate with different source ordering">⤨ Reshuffle</button></div>
+      <p id="directorOutput" class="director-output" role="status">Choose a preset or describe your direction, then generate a timeline.</p>
+     </section>
+     <section class="panel timeline-panel"><div class="panel-heading"><div><span class="section-number">03</span><h2>Beat-synced timeline</h2></div><span class="info-chip" id="sceneCount">0 CUTS</span></div>
+      <div class="wavebar"><div class="wavebar-label"><span>MASTER AUDIO</span><span id="bpmReadout">BPM —</span></div><canvas id="waveform" width="800" height="90" aria-label="Soundtrack waveform; click to seek"></canvas><div class="wavebar-foot"><span>0:00</span><span id="waveEnd">0:00</span></div></div>
+      <div class="timeline-label"><span>VIDEO TRACK <small>Click a segment to seek · change footage & effects below</small></span><span id="timelineDuration">0:00</span></div>
+      <div id="timelineBar" class="timeline-bar"><span class="timeline-empty">Your edited shots will appear on this timeline.</span></div>
+      <div id="sceneInspector" class="scene-inspector"><div class="empty-scene">Generate an edit to inspect & customize individual scenes.</div></div>
+     </section>
+    </div>
+    <div class="right-column">
+     <section class="panel preview-panel"><div class="panel-heading"><div><span class="section-number">LIVE</span><h2>Preview</h2></div><span class="preview-pill">● LIVE CANVAS</span></div>
+      <div class="format-row"><label>FORMAT <select id="aspect"><option value="9:16">9:16 Vertical</option><option value="16:9">16:9 Wide</option><option value="1:1">1:1 Square</option></select></label><label>QUALITY <select id="quality"><option value="540">Fast · 540p</option><option value="720" selected>HD · 720p</option><option value="1080">Full HD · 1080p</option></select></label></div>
+      <div class="preview-shell"><div id="previewFrame" class="preview-frame"><canvas id="previewCanvas" width="540" height="960"></canvas><div id="emptyPreview" class="preview-empty"><div class="empty-preview-orbit">✦</div><b>THIS IS YOUR STAGE</b><span>Load music & footage to start creating.</span></div><div class="preview-brand">GalaXia // AUTOCUT</div></div></div>
+      <div class="transport"><button id="previewStop" aria-label="Stop preview" title="Stop preview">◼</button><button id="previewPlay" class="play-button" aria-label="Play or pause preview">▶</button><input type="range" id="previewSeek" min="0" max="1000" value="0" aria-label="Seek in timeline"><span class="time-readout"><span id="currentTime">0:00</span> / <span id="totalTime">0:00</span></span></div>
+      <p class="preview-hint">Audio is the timing master. Video source audio is always muted.</p>
+     </section>
+     <section class="panel lock-panel"><div class="panel-heading"><div><span class="section-number">04</span><h2>Timeline rules</h2></div></div>
+      <div class="lock-control"><div class="lock-icon">♙</div><div><b>Lock audio duration</b><small>Always match the uploaded song's full running time.</small></div><label class="switch"><input id="durationLock" type="checkbox" checked><span class="slider"></span><span class="sr-only">Lock audio duration</span></label></div>
+      <div class="duration-readout"><div><span>SONG LENGTH</span><b id="songDuration">—</b></div><span class="duration-link">≡</span><div><span>VIDEO LENGTH</span><b id="videoDuration">—</b></div></div>
+      <div class="unlock-box" id="unlockBox" hidden><label for="customDuration">Custom video length (seconds)</label><input id="customDuration" type="number" min="0.5" step="0.1" value="30"><small>Unlocked: video may be shorter or longer than the song.</small></div>
+      <div class="lock-footer" id="lockMessage"><span>✓</span> Lock is ON. AutoCut fills the exact planned soundtrack timeline by looping or trimming visuals.</div>
+     </section>
+     <section class="panel export-panel"><div class="panel-heading"><div><span class="section-number">05</span><h2>Finish & export</h2></div><span class="info-chip">BROWSER RENDER</span></div>
+      <label class="project-title">PROJECT NAME<input id="projectName" value="GalaXia Music Video" maxlength="70"></label>
+      <div class="export-stats"><span><b id="exportResolution">720 × 1280</b><small>RESOLUTION</small></span><span><b id="exportScenes">0</b><small>VIDEO CUTS</small></span><span><b id="exportLength">—</b><small>RUNTIME</small></span></div>
+      <button id="exportBtn" class="btn primary export-button">↓ &nbsp; Render & download WebM</button>
+      <button id="downloadEdl" class="btn subtle edl-button">⇩ Save editable plan (.json)</button>
+      <progress id="renderProgress" value="0" max="100" hidden></progress><p id="status" class="status" role="status">Ready when your clips are.</p>
+      <div class="export-note"><span>ⓘ</span><p>Export uses your browser's recording engine. Chrome or Edge desktop works best. Codec support varies; file end time can differ by a frame due to encoding. Videos & music are not uploaded.</p></div>
+     </section>
+    </div>
+   </div>
+   <footer><span>✦ GalaXia AutoCut Studio</span><span>Built on rhythm. Directed by you. <span class="footer-purple">© Your creative universe</span></span></footer>
+  </div>
+ </main>
+</div>
+<script type="module" src="./app.js"></script>
+</body></html>
