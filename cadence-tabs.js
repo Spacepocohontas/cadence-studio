@@ -1,7 +1,7 @@
 (()=>{
 const tabs=[...document.querySelectorAll('.tab')],panels=[...document.querySelectorAll('.tabPanel')];
-function show(name){const n=name||'studio';tabs.forEach(t=>{const on=t.dataset.tab===n;t.classList.toggle('active',on);t.setAttribute('aria-selected',on?'true':'false')});panels.forEach(p=>p.classList.toggle('active',p.dataset.panel===n));localStorage.setItem('cadence-tab',n)}
-tabs.forEach(t=>t.addEventListener('click',()=>show(t.dataset.tab)));show(localStorage.getItem('cadence-tab')||'studio');
+function show(name){const n=name||'studio';document.body.dataset.cadenceView=n;tabs.forEach(t=>{const on=t.dataset.tab===n;t.classList.toggle('active',on);t.setAttribute('aria-selected',on?'true':'false')});panels.forEach(p=>p.classList.toggle('active',p.dataset.panel===n));localStorage.setItem('cadence-tab',n)}
+const labels={studio:'🎧<span>Studio</span>',timeline:'🎚️<span>Timeline</span>',visuals:'✨<span>Visuals</span>',ai:'🪄<span>AI Lab</span>',settings:'⚙️<span>More</span>'};tabs.forEach(t=>{const key=t.dataset.tab;if(labels[key])t.innerHTML=labels[key];t.addEventListener('click',()=>show(key));t.setAttribute('aria-label',key) });show(localStorage.getItem('cadence-tab')||'studio');
 const auto=document.querySelector('#autoShuffle');let on=localStorage.getItem('cadence-auto-shuffle')==='1',timer=null;
 function randomize(){const a=[...document.querySelectorAll('.mediaItem')];if(!a.length)return;const picks=a.sort(()=>Math.random()-.5);if(picks[0])picks[0].click();const loadB=document.querySelector('#loadB');if(loadB&&picks[1]){picks[1].click();loadB.click()}const rv=document.querySelector('#randomVisual');if(rv)rv.click()}
 function set(v){on=v;localStorage.setItem('cadence-auto-shuffle',v?'1':'0');if(auto)auto.textContent='AUTO SHUFFLE: '+(v?'ON':'OFF');clearInterval(timer);if(v){randomize();timer=setInterval(randomize,60000)}}
